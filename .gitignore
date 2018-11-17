@@ -1,0 +1,11 @@
+# bytecode-compiled files
+__pycache__
+
+# egg-info directories
+*.egg-info
+
+# pyenv
+.python-version
+
+# pytest cache
+.cache

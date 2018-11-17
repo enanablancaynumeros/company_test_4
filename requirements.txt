@@ -1,0 +1,11 @@
+docker-compose==1.23.0
+
+-r ci_requirements.txt
+
+-r api/requirements.txt
+-r data_handlers/requirements.txt
+-r tests/requirements.txt
+
+-e api
+-e tests
+-e data_handlers

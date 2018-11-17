@@ -1,0 +1,8 @@
+uwsgi:
+  log_destination_folder: $(LOGS_DESTINATION_FOLDER)
+  log_service_name: $(LOGGER_SERVICE_NAME)
+  module: inventory_api.wsgi:app
+  processes: 2
+  logto: %(log_destination_folder)%(log_service_name)/uwsgi.log
+  protocol: http
+  log-encoder: json {"unix":${unix}, "msg":"${msg}"}
