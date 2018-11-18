@@ -32,7 +32,7 @@ class DBBaseHandler:
         Returns:
             dict with the serialization of the item requested
         """
-        pks = cls.filter_non_primary_keys(primary_keys)
+        pks = cls._filter_non_primary_keys(primary_keys)
         with get_db_session_scope() as session:
             result = session.query(cls.model).get(pks)
             if not result:
@@ -42,26 +42,19 @@ class DBBaseHandler:
             return cls.schema.dump(result).data
 
     @classmethod
-    def add(cls, session=None, **kwargs):
+    def add(cls, **kwargs):
         validation = cls.schema.load(data=kwargs)
         if validation.errors:
             raise ValidationException(validation.errors)
 
         try:
-            if not session:
-                with get_db_session_scope() as session:
-                    return cls._add(session, validation)
-            else:
-                return cls._add(session, validation)
+            with get_db_session_scope() as session:
+                session.add(validation.data)
+                session.enable_relationship_loading(validation.data)
+                session.flush()
+                return cls.schema.dump(validation.data).data
         except IntegrityError as e:
             raise ValidationException(e)
-
-    @classmethod
-    def _add(cls, session, validation):
-        session.add(validation.data)
-        session.enable_relationship_loading(validation.data)
-        session.flush()
-        return cls.schema.dump(validation.data).data
 
     @classmethod
     def get_by_name(cls, given_name):
@@ -95,7 +88,7 @@ class DBBaseHandler:
                 'Model %s has no attributes %s.', cls.model, non_applicable_fields
             )
 
-        primary_keys = cls.filter_non_primary_keys(item_pks)
+        primary_keys = cls._filter_non_primary_keys(item_pks)
 
         with get_db_session_scope() as session:
             instance = session.query(cls.model).get(primary_keys)
@@ -108,13 +101,13 @@ class DBBaseHandler:
             return cls.schema.dump(instance).data
 
     @classmethod
-    def get_model_pks(cls):
+    def _get_model_pks(cls):
         return [x.name for x in inspect(cls.model).primary_key]
 
     @classmethod
-    def filter_non_primary_keys(cls, item_pks):
+    def _filter_non_primary_keys(cls, item_pks):
         try:
-            primary_keys = [item_pks[pk] for pk in cls.get_model_pks()]
+            primary_keys = [item_pks[pk] for pk in cls._get_model_pks()]
         except KeyError as e:
             raise KeyError(
                 'Missing primary key %s to update/get model %s.', e, cls.model.__name__

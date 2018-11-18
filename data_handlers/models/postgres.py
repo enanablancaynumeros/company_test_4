@@ -9,7 +9,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship
 from sqlalchemy_utils.models import generic_repr
-from sqlalchemy.sql.functions import now as utcnow_in_db
+from sqlalchemy.sql import functions
 
 from connectors.db_connection import Base
 
@@ -21,7 +21,7 @@ class ProductModel(Base):
     id = Column(Integer, primary_key=True, autoincrement=True, index=True)
     name = Column(String(120), nullable=False, unique=True)
     creation_datetime = Column(
-        DateTime(timezone=True), default=utcnow_in_db(), nullable=False
+        DateTime(timezone=True), server_default=functions.now(), nullable=False
     )
 
 
@@ -32,7 +32,7 @@ class BatchModel(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True, index=True)
     registration_datetime = Column(
-        DateTime(timezone=True), default=utcnow_in_db(), nullable=False
+        DateTime(timezone=True), server_default=functions.now(), nullable=False
     )
     expiry_date = Column(Date(), nullable=False, index=True)
     product_id = Column(
@@ -61,5 +61,8 @@ class BatchHistoryModel(Base):
     )
     stock = Column(Integer, nullable=False)
     datetime = Column(
-        DateTime(timezone=True), default=utcnow_in_db(), index=True, nullable=False
+        DateTime(timezone=True),
+        server_default=functions.now(),
+        index=True,
+        nullable=False,
     )

@@ -1,10 +1,9 @@
 from http import HTTPStatus
 
-from db_handlers.batch import DBBatchHistoryHandler
 from flask import Blueprint, jsonify, request
 
 from common_utils.exceptions import ValidationException, UnExistingDBEntityException
-from db_handlers import DBProductHandler, DBBatchHandler
+from db_handlers import DBProductHandler, DBBatchHandler, DBBatchHistoryHandler
 
 products_app = Blueprint('batch_app', __name__)
 

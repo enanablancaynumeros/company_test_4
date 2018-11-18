@@ -4,8 +4,8 @@ from distutils.util import strtobool
 import dateparser
 import ipdb
 from behave import register_type
-from common_utils.constants import FreshnessEnum
 
+from common_utils.constants import FreshnessEnum
 from connectors.db_connection import recreate_postgres_metadata
 from db_handlers import DBProductHandler
 

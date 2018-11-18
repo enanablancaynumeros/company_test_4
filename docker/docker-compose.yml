@@ -12,7 +12,7 @@ services:
     ports:
       - "${POSTGRES_PORT}:5432"
 
-  inventory_api:
+  api:
     build:
       context: ../
       dockerfile: docker/api.Dockerfile
@@ -20,7 +20,7 @@ services:
     env_file:
       - .env
     environment:
-      LOGGER_SERVICE_NAME: inventory_api
+      LOGGER_SERVICE_NAME: api
     command: --api
     ports:
       - "${INVENTORY_API_PORT}:${INVENTORY_API_PORT}"
@@ -50,5 +50,5 @@ services:
       LOGGER_SERVICE_NAME: tests
       FLASK_APP: api/inventory_api/app
     depends_on:
-      - inventory_api
+      - api
       - postgres

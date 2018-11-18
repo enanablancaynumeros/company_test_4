@@ -100,7 +100,6 @@ data_type_conversions = {
 def make_request(
     context, method, view_function, blueprint=None, address_kwargs=None, **kwargs
 ):
-
     address_kwargs = address_kwargs or {}
 
     address = get_address_for(

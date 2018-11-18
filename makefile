@@ -9,8 +9,8 @@ SHELL := /bin/bash
 build:
 	cd docker && \
 	find . -type d -name __pycache__ -exec rm -r {} \+ && \
-	docker-compose build inventory_api tests && \
-    docker tag inventory_management_inventory_api inventory_management_db_migrations
+	docker-compose build api tests && \
+    docker tag inventory_management_api inventory_management_db_migrations
 
 up: build
 	cd docker && \
@@ -33,7 +33,7 @@ docker_down:
 
 tests: format static_analysis build
 	cd docker && \
-	BEHAVE_DEBUG_ON_ERROR=$(or $(BEHAVE_DEBUG_ON_ERROR),True) docker-compose run tests
+	docker-compose run tests --remove-orphans
 
 behave_locally: format db_up
 	$(shell cat docker/.env | xargs) INVENTORY_API_HOST=localhost FLASK_APP=api/inventory_api/wsgi.py BEHAVE_DEBUG_ON_ERROR=True POSTGRES_HOST=localhost behave tests --no-capture --summary --show-timings --no-skipped
