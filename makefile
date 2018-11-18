@@ -14,7 +14,7 @@ build:
 
 up: build
 	cd docker && \
-	docker-compose up -d --remove-orphans --scale api=2
+	docker-compose up -d --remove-orphans --scale tests=0
 
 db_up:
 	cd docker && docker-compose up --remove-orphans -d postgres
