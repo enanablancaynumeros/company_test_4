@@ -21,9 +21,11 @@ RUN pip install --no-cache-dir -r /src/api/requirements.txt \
 
 COPY api /src/api
 COPY data_handlers /src/data_handlers
+COPY utils /src/utils
 
 RUN pip install -e /src/api \
-                -e /src/data_handlers
+                -e /src/data_handlers \
+                -e /src/utils
 
 COPY docker/api_entrypoint.sh /entrypoint.sh
 WORKDIR /src

@@ -9,3 +9,4 @@ docker-compose==1.23.0
 -e api
 -e tests
 -e data_handlers
+-e utils

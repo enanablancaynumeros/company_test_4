@@ -12,3 +12,4 @@ class DBProductHandler(DBBaseHandler):
 
     schema = ProductSchema()
     model = ProductModel
+    order = ProductModel.creation_datetime.desc()

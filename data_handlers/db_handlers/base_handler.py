@@ -4,7 +4,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.inspection import inspect
 from sqlalchemy.orm.exc import NoResultFound
 
-from db_handlers.utils import chunker, UnExistingDBEntityException, ValidationException
+from common_utils.exceptions import ValidationException, UnExistingDBEntityException
 from connectors.db_connection import get_db_session_scope
 
 
@@ -75,19 +75,6 @@ class DBBaseHandler:
                     '%s %s does not exist.', cls.model.__name__, given_name
                 ) from e
             return cls.schema.dump(result).data
-
-    @classmethod
-    def _get_id_by_name(cls, given_name):
-        return cls.get_by_name(given_name).get('id')
-
-    @classmethod
-    def insert_in_chunks(cls, items):
-        items_inserted = 0
-        with get_db_session_scope() as session:
-            for chunk in chunker(items, cls.BATCH_SIZE):
-                session.execute(cls.model.__table__.insert(), chunk)
-                items_inserted += len(chunk)
-        return items_inserted
 
     @classmethod
     def update(cls, item_pks, new_values):

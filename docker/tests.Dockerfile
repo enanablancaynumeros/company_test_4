@@ -26,10 +26,12 @@ RUN pip install --no-cache-dir -r /src/api/requirements.txt \
 COPY api /src/api
 COPY data_handlers /src/data_handlers
 COPY tests /src/tests/
+COPY utils /src/utils/
 
 RUN pip install -e /src/data_handlers \
                 -e /src/api \
-                -e /src/tests
+                -e /src/tests \
+                -e /src/utils
 
 COPY .flake8 /src
 COPY docker/test_entrypoint.sh /entrypoint.sh

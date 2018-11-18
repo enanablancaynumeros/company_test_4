@@ -10,10 +10,12 @@ from alembic_scripts.utils import (
     check_scripts_do_not_have_conflicts,
 )
 from inventory_api.product_views import products_app
+from inventory_api.stats_views import stats_app
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ['PAIDSEARCH_SECRET_KEY']
 app.register_blueprint(products_app, url_prefix='/product')
+app.register_blueprint(stats_app, url_prefix='/stats')
 
 
 @app.errorhandler(500)
